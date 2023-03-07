@@ -7,8 +7,8 @@ class CityForm extends React.Component {
   render() {
     return (
       <>
-        <Form onSubmit={this.props.handleSubmit}>
-          <Form.Group className="mb-5 border p-5">
+        <Form onSubmit={this.props.handleSubmit} className="shadow bg body">
+          <Form.Group className="mb-5 p-5">
             <Form.Label>Search by city name to find lattitude & longitude: </Form.Label>
             <Form.Control
               type="text"

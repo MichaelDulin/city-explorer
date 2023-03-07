@@ -45,19 +45,18 @@ class App extends React.Component {
       <>
         <Header />
         <CityForm
-          className="mb-5 border p-5"
+          className="mb-5 p-5 "
           handleSubmit={this.handleSubmit}
           handleInput={this.handleInput}
           cityData={this.state.cityData}
         />
-        <div className="d-flex p-2 bd-highlight ">
-          <ul className="me-5">
-            Results:
-            <li>City Name: {this.state.cityName}</li>
+        <div className="results">
+          <ul className="">
+            <li>{this.state.cityName}</li>
             <li>Latitude: {this.state.lat}</li>
             <li>longitude: {this.state.long}</li>
           </ul>
-          <img className="shadow ms-5 bg-body .justify-content-end" src={mapURL} alt={this.state.cityName} ></img>
+          <img className="shadow bg body" src={mapURL} alt={this.state.cityName} ></img>
         </div>
         <Footer />
       </>
