@@ -2,43 +2,58 @@ import React from "react";
 import axios from "axios";
 import Header from "./Header";
 import Footer from "./Footer";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Form from "react-bootstrap/Form";
+import "bootstrap/dist/css/bootstrap.min.css";
+import CityForm from "./CityForm";
 import "./App.css";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchQuery: "",
-      location: {},
+      cityName: "",
+      cityData: {},
+      lat: "",
+      long: "",
+      reults: false
     };
   }
 
-  getLocation = async () => {
-    const API = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_CITY_KEY}&q=${this.state.searchQuery}&format=json`;
-    const res = await axios.get(API);
-    console.log(res.data[0]);
-    this.setState({ location: res.data[0] });
+  handleInput = (e) => {
+    this.setState({
+      cityName: e.target.value,
+    });
+  };
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    let getCityData = await axios.get(
+      `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityName}&format=json`
+    );
+    
+    this.setState({
+      results: true,
+      cityData: getCityData.data[0],
+      lat: getCityData.data[0].lat,
+      long: getCityData.data[0].lon,
+    });
   };
 
   render() {
+    let mapURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=47.6038321,-122.330062&zoom=12`;
     return (
       <>
         <Header />
-        <Form.group className="mb-5 border p-5">
-          <Form.Label>
-            Enter a location to find lattitude and longitude:{" "}
-          </Form.Label>
-          <Form.Control
-            placeholder="Enter a location..."
-            onChange={(e) => this.setState({ searchQuery: e.target.value })}
-          />
-          <button onClick={this.getLocation}>Explore!</button>
-          {this.state.location.place_id && (
-            <h2>The city is: {this.state.location.display_name}</h2>
-          )}
-        </Form.group>
+        <CityForm
+          className="mb-5 border p-5"
+          handleSubmit={this.handleSubmit}
+          handleInput={this.handleInput}
+          cityData={this.state.cityData}
+        />
+        <ul>Results:
+          <li>City Name: {this.state.cityName}</li>
+          <li>Latitude: {this.state.lat}</li>
+          <li>longitude: {this.state.long}</li>
+        </ul>
         <Footer />
       </>
     );

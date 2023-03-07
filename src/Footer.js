@@ -5,7 +5,7 @@ class Footer extends React.Component {
 
     return (
       <>
-        <footer>copy& Michael Dulin</footer>
+        <footer>A Michael Dulin Product</footer>
       </>
     );
   }
