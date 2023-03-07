@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CityForm from "./CityForm";
 import "./App.css";
+import "./styles.css";
 
 class App extends React.Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class App extends React.Component {
       cityData: {},
       lat: "",
       long: "",
-      reults: false
+      reults: false,
     };
   }
 
@@ -29,7 +30,7 @@ class App extends React.Component {
     let getCityData = await axios.get(
       `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityName}&format=json`
     );
-    
+
     this.setState({
       results: true,
       cityData: getCityData.data[0],
@@ -39,7 +40,7 @@ class App extends React.Component {
   };
 
   render() {
-    let mapURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=47.6038321,-122.330062&zoom=12`;
+    let mapURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.long}&zoom=11`;
     return (
       <>
         <Header />
@@ -49,11 +50,15 @@ class App extends React.Component {
           handleInput={this.handleInput}
           cityData={this.state.cityData}
         />
-        <ul>Results:
-          <li>City Name: {this.state.cityName}</li>
-          <li>Latitude: {this.state.lat}</li>
-          <li>longitude: {this.state.long}</li>
-        </ul>
+        <div className="d-flex p-2 bd-highlight ">
+          <ul className="me-5">
+            Results:
+            <li>City Name: {this.state.cityName}</li>
+            <li>Latitude: {this.state.lat}</li>
+            <li>longitude: {this.state.long}</li>
+          </ul>
+          <img className="shadow ms-5 bg-body .justify-content-end" src={mapURL} alt={this.state.cityName} ></img>
+        </div>
         <Footer />
       </>
     );
