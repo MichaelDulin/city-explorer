@@ -50,14 +50,17 @@ class App extends React.Component {
           handleInput={this.handleInput}
           cityData={this.state.cityData}
         />
-        <div className="results">
-          <ul className="">
-            <li>{this.state.cityName}</li>
-            <li>Latitude: {this.state.lat}</li>
-            <li>longitude: {this.state.long}</li>
-          </ul>
-          <img className="shadow bg body" src={mapURL} alt={this.state.cityName} ></img>
-        </div>
+        {this.state.results
+          && (
+            <div className="results">
+              <ul className="">
+                <li>{this.state.cityName}</li>
+                <li>Latitude: {this.state.lat}</li>
+                <li>longitude: {this.state.long}</li>
+              </ul>
+              <img className="shadow bg body" src={mapURL} alt={this.state.cityName} ></img>
+            </div>
+          )};
         <Footer />
       </>
     );
