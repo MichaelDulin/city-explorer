@@ -13,13 +13,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       cityName: "",
-      cityData: {},
+      cityData: [],
       lat: "",
       long: "",
       error: false,
       errorMsg: "",
       reults: false,
-      weatherData: {},
+      weatherData: [],
     };
   }
 
@@ -72,21 +72,26 @@ class App extends React.Component {
           handleInput={this.handleInput}
           cityData={this.state.cityData}
         />
-
-        {this.state.results && (
-          <div className="results">
-            <ul className="">
-              <li>{this.state.cityDataName}</li>
-              <li>Latitude: {this.state.lat}</li>
-              <li>longitude: {this.state.long}</li>
-            </ul>
-            <img
-              className="shadow bg body"
-              src={mapURL}
-              alt={this.state.cityDataName}
-            ></img>
-            {cityWeatherValues}
-          </div>
+        {this.state.error ? (
+          <p>{this.state.errorMsg}</p>
+        ) : this.state.cityDataName === undefined ? (
+          <p />
+        ) : (
+          this.state.results && (
+            <div className="results">
+              <ul className="">
+                <li>{this.state.cityDataName}</li>
+                <li>Latitude: {this.state.lat}</li>
+                <li>longitude: {this.state.long}</li>
+              </ul>
+              <img
+                className="shadow bg body"
+                src={mapURL}
+                alt={this.state.cityDataName}
+              ></img>
+              <div>{cityWeatherValues}</div>
+            </div>
+          )
         )}
 
         <Footer />
