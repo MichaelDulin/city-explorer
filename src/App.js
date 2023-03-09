@@ -4,6 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CityForm from "./CityForm";
+import Weather from "./Weather";
 import "./App.css";
 import "./styles.css";
 
@@ -34,10 +35,14 @@ class App extends React.Component {
       let getCityData = await axios.get(
         `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityName}&format=json`
       );
+      let getWeatherData = await axios.get(
+        `${process.env.REACT_APP_SERVER}/weather?lat=${this.state.lat}&lon=${this.state.long}`
+      );
 
       this.setState({
         results: true,
         cityData: getCityData.data[0],
+        weatherData: getWeatherData[0],
         cityDataName: getCityData.data[0].display_name,
         lat: getCityData.data[0].lat,
         long: getCityData.data[0].lon,
@@ -46,14 +51,17 @@ class App extends React.Component {
     } catch (error) {
       this.setState({
         error: true,
-        errorMsg: `ERROR: ${error.response.status}`
-      })
+        errorMsg: `ERROR: ${error.response.status}`,
+      });
     }
   };
 
-
   render() {
     let mapURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.long}&zoom=11`;
+    let cityWeatherValues = this.state.weatherData.map((cur) => {
+      return <Weather date={cur.date} description={cur.description} />;
+    });
+
     return (
       <>
         <Header />
@@ -77,6 +85,7 @@ class App extends React.Component {
               src={mapURL}
               alt={this.state.cityDataName}
             ></img>
+            {cityWeatherValues}
           </div>
         )}
 
