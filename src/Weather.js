@@ -5,7 +5,7 @@ class Weather extends React.Component{
 
   render(){
     return(
-      <Card>
+      <Card style={{width:'18rem'}}>
         <Card.Title>{this.props.date}</Card.Title>
         <Card.Text>{this.props.description}</Card.Text>
       </Card>
