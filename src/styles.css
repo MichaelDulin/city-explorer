@@ -1,27 +1,42 @@
 body {
-    background-color: rgb(191, 191, 191);
-    margin-left: 10%;
-    margin-right: 10%;
-  }
+  background-color: rgb(191, 191, 191);
+  margin-left: 10%;
+  margin-right: 10%;
+}
 
-  h1 {
-    margin: 3rem;
-    border-bottom: 2px solid gray;
-  }
+h1 {
+  margin: 3rem;
+  border-bottom: 2px solid gray;
+}
 
-  .results {
-    display: flex;
-    justify-content: space-between;
-    align-content: space-between;
-  }
 
-  .results ul {
-    list-style: none;
-    font-size: 25px;
-    line-height: 4;
+.results ul {
+  list-style: none;
+  font-size: 25px;
+  line-height: 4;
+}
 
-  }
+footer {
+  margin-top: 10rem;
+}
 
-  footer {
-    margin-top: 10rem;
-  }
+.results1 {
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
+}
+
+.results2 {
+  display: flex;
+  justify-content: space-evenly;
+  align-content: space-between;
+  padding-top: 2rem;
+}
+
+.forecast {
+  padding: 2rem;
+}
+
+.movies {
+  padding: 2rem;
+}

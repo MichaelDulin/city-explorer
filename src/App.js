@@ -22,7 +22,7 @@ class App extends React.Component {
       errorMsg: "",
       results: false,
       weatherData: [],
-      movieData: []
+      movieData: [],
     };
   }
 
@@ -35,15 +35,20 @@ class App extends React.Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let getCityData = await axios.get(`https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityName}&format=json`);
-      this.setState({
-        results: true,
-        cityData: getCityData.data[0],
-        cityDataName: getCityData.data[0].display_name,
-        lat: getCityData.data[0].lat,
-        long: getCityData.data[0].lon,
-        error: false,
-      }, this.handleWeather);
+      let getCityData = await axios.get(
+        `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityName}&format=json`
+      );
+      this.setState(
+        {
+          results: true,
+          cityData: getCityData.data[0],
+          cityDataName: getCityData.data[0].display_name,
+          lat: getCityData.data[0].lat,
+          long: getCityData.data[0].lon,
+          error: false,
+        },
+        this.handleWeather
+      );
     } catch (error) {
       this.setState({
         error: true,
@@ -54,41 +59,38 @@ class App extends React.Component {
 
   handleWeather = async () => {
     this.handleMovies();
-    let getWeatherData = await axios.get(`${process.env.REACT_APP_SERVER}/weather?lat=${this.state.lat}&lon=${this.state.long}`);
+    let getWeatherData = await axios.get(
+      `${process.env.REACT_APP_SERVER}/weather?lat=${this.state.lat}&lon=${this.state.long}`
+    );
     this.setState({
-      weatherData: getWeatherData.data
+      weatherData: getWeatherData.data,
     });
   };
 
   handleMovies = async () => {
-    let getMovieData = await axios.get(`${process.env.REACT_APP_SERVER}/movie?city=${this.state.cityName}`);
+    let getMovieData = await axios.get(
+      `${process.env.REACT_APP_SERVER}/movie?city=${this.state.cityName}`
+    );
     this.setState({
-      movieData: getMovieData.data
+      movieData: getMovieData.data,
     });
   };
 
-  
-
   render() {
     let mapURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.long}&zoom=11`;
-    let forecast = this.state.weatherData.map(weather => {
-      return(
-        <Weather
-          date={weather.date}
-          description={weather.description}
-        />
-      )
-    })
+    let forecast = this.state.weatherData.map((weather) => {
+      return <Weather date={weather.date} description={weather.description} />;
+    });
 
-    let movies = this.state.movieData.map(movie => {
-      return(
+    let movies = this.state.movieData.map((movie) => {
+      return (
         <Movie
           title={movie.title}
           releasedDate={movie.released_on}
           img_url={movie.img_url}
         />
-      )
-    })
+      );
+    });
 
     return (
       <>
@@ -101,9 +103,9 @@ class App extends React.Component {
           cityData={this.state.cityData}
         />
 
-          {this.state.results && (
-            <article className="renderedContent">
-            <div className="results">
+        {this.state.results && (
+          <article className="renderedContent">
+            <div className="results1">
               <ul className="">
                 <li>{this.state.cityDataName}</li>
                 <li>Latitude: {this.state.lat}</li>
@@ -115,16 +117,18 @@ class App extends React.Component {
                 alt={this.state.cityName}
               ></img>
             </div>
+            <div className="results2">
               <div className="forecast">
-              <h2>Local Weather</h2>
-              {forecast}
+                <h2>Local Weather</h2>
+                {forecast}
               </div>
               <div className="movies">
                 <h2>Local Movies</h2>
                 {movies}
-                </div>
-            </article>
-          )}
+              </div>
+            </div>
+          </article>
+        )}
         <Footer />
       </>
     );
