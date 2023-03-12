@@ -34,17 +34,17 @@ class App extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
+    let state;
+    let cityUrl = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityName}&format=json`
     try {
-      let getCityData = await axios.get(
-        `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.cityName}&format=json`
-      );
+      state = await axios.get(cityUrl);
       this.setState(
         {
           results: true,
-          cityData: getCityData.data[0],
-          cityDataName: getCityData.data[0].display_name,
-          lat: getCityData.data[0].lat,
-          long: getCityData.data[0].lon,
+          cityData: state.data[0],
+          cityDataName: state.data[0].display_name,
+          lat: state.data[0].lat,
+          long: state.data[0].lon,
           error: false,
         },
         this.handleWeather
@@ -59,22 +59,42 @@ class App extends React.Component {
 
   handleWeather = async () => {
     this.handleMovies();
-    let getWeatherData = await axios.get(
+    let weatherUrl = await axios.get(
       `${process.env.REACT_APP_SERVER}/weather?lat=${this.state.lat}&lon=${this.state.long}`
     );
-    this.setState({
-      weatherData: getWeatherData.data,
-    });
-  };
+    let getWeather;
+    try{
+      getWeather = await axios.get(weatherUrl);
+      this.setState({
+        weatherData: getWeather.data
+      })
+    } catch (error) {
+      this.setState({
+        error: true,
+        errorMessage: `An Error Occured: ${error.response.status}`
+      })
+    }
+    console.log(weatherUrl);
+  }
 
   handleMovies = async () => {
-    let getMovieData = await axios.get(
+    let movieUrl = await axios.get(
       `${process.env.REACT_APP_SERVER}/movie?city=${this.state.cityName}`
     );
-    this.setState({
-      movieData: getMovieData.data,
-    });
-  };
+    let getMovies;
+    try{
+      getMovies = await axios.get(movieUrl);
+      this.setState({
+        movieData: getMovies.data
+      })
+    } catch (error) {
+      this.setState({
+        error: true,
+        errorMessage: `An Error Occured: ${error.response.status}`
+      })
+    }
+  }
+
 
   render() {
     let mapURL = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.long}&zoom=11`;
@@ -86,8 +106,8 @@ class App extends React.Component {
       return (
         <Movie
           title={movie.title}
-          releasedDate={movie.released_on}
           img_url={movie.img_url}
+          released_on={movie.released_on}
         />
       );
     });
@@ -134,29 +154,5 @@ class App extends React.Component {
     );
   }
 }
-
-/*
-{this.state.error ? (
-  <p>{this.state.errorMsg}</p>
-) : this.state.cityDataName === undefined ? (
-  <p />
-) : (
-  this.state.results && (
-    <div className="results">
-      <ul className="">
-        <li>{this.state.cityDataName}</li>
-        <li>Latitude: {this.state.lat}</li>
-        <li>longitude: {this.state.long}</li>
-      </ul>
-      <img
-        className="shadow bg body"
-        src={mapURL}
-        alt={this.state.cityDataName}
-      ></img>
-      <div>{cityWeatherValues}</div>
-    </div>
-  )
-)}
-*/
 
 export default App;
